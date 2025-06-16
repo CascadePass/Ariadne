@@ -5,7 +5,7 @@ using System.Windows;
 namespace CascadePass.CascadeCore.UI.Tests.Converters
 {
     [TestClass]
-    public class IsNullOrWhitespaceConverterTests
+    public class EmptyStringToBooleanConverterTests
     {
         [TestMethod]
         public void Space_Returns_True()

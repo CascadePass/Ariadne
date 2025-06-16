@@ -41,9 +41,9 @@ namespace CascadePass.CascadeCore.UI
         /// <typeparam name="T">The type of the property.</typeparam>
         /// <param name="field">The backing field whose value to test and possibly change.</param>
         /// <param name="value">The new value of the property.</param>
-        /// <param name="propertyName">The name of the properties, to raise the <see cref="PropertyChanged"/> event for.</param>
+        /// <param name="propertyNames">The name of the properties, to raise the <see cref="PropertyChanged"/> event for.</param>
         /// <returns>True if the value has changed, false if it was already the new value.</returns>
-        protected bool SetPropertyValue<T>(ref T field, T value, string[] propertyNames)
+        protected bool SetPropertyValue<T>(ref T field, T value, IEnumerable<string> propertyNames)
         {
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
