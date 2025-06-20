@@ -16,6 +16,8 @@ namespace CascadePass.CascadeCore.UI
         public event RegistryAccessedHandler RegistryAccessed;
         public event RegistryAccessedAsyncHandler RegistryAccessedAsync;
 
+        #region Constructors
+
         public RegistryProvider()
         {
             this.hive = RegistryHive.CurrentUser;
@@ -25,6 +27,8 @@ namespace CascadePass.CascadeCore.UI
         {
             this.hive = targetHive;
         }
+
+        #endregion
 
         private RegistryKey OpenKey(string keyName, bool writable)
         {
@@ -146,13 +150,14 @@ namespace CascadePass.CascadeCore.UI
             }
         }
 
-
-
-
         protected virtual void OnRegistryAccessed(RegistryAccessEventArgs e)
         {
             this.RegistryAccessed?.Invoke(this, e);
+            this.OnRegistryAccessedAsync(e);
+        }
 
+        protected virtual void OnRegistryAccessedAsync(RegistryAccessEventArgs e)
+        {
             if (this.RegistryAccessedAsync != null)
             {
                 var invocationList = this.RegistryAccessedAsync.GetInvocationList().Cast<RegistryAccessedAsyncHandler>();
@@ -164,18 +169,25 @@ namespace CascadePass.CascadeCore.UI
         }
     }
 
+    /// <summary>
+    /// Provides data for events related to Windows Registry access operations, 
+    /// including key and value names, access type, outcome, and any associated exception.
+    /// </summary>
     public class RegistryAccessEventArgs : EventArgs
     {
-        public RegistryAccessEventArgs(
+        #region Constructors
+
+        internal RegistryAccessEventArgs(
             RegistryHive hive,
             string keyName,
             RegistryAccessType accessType)
         {
+            this.Hive = hive;
             this.KeyName = keyName;
             this.AccessType = accessType;
         }
 
-        public RegistryAccessEventArgs(
+        internal RegistryAccessEventArgs(
             RegistryHive hive,
             string keyName,
             string valueName,
@@ -187,7 +199,7 @@ namespace CascadePass.CascadeCore.UI
             this.AccessType = accessType;
         }
 
-        public RegistryAccessEventArgs(
+        internal RegistryAccessEventArgs(
             RegistryHive hive,
             string keyName,
             RegistryAccessType accessType,
@@ -199,7 +211,7 @@ namespace CascadePass.CascadeCore.UI
             this.Exception = exception;
         }
 
-        public RegistryAccessEventArgs(
+        internal RegistryAccessEventArgs(
             RegistryHive hive,
             string keyName,
             string valueName,
@@ -213,12 +225,42 @@ namespace CascadePass.CascadeCore.UI
             this.Exception = exception;
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the registry hive involved in the operation.
+        /// </summary>
         public RegistryHive Hive { get; }
+
+        /// <summary>
+        /// Gets the name of the registry key involved in the operation.
+        /// </summary>
         public string KeyName { get; }
+
+        /// <summary>
+        /// Gets the name of the value within the registry key that was accessed or modified.
+        /// </summary>
         public string ValueName { get; }
+
+        /// <summary>
+        /// Gets the type of registry access operation that was performed.
+        /// </summary>
         public RegistryAccessType AccessType { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the registry operation completed without throwing an exception.
+        /// </summary>
         public bool WasSuccessful => this.Exception == null;
+
+        /// <summary>
+        /// Gets the exception thrown during the registry operation, if any. 
+        /// Returns <c>null</c> if the operation was successful.
+        /// </summary>
         public Exception Exception { get; }
+
+        #endregion
     }
 
     public enum RegistryAccessType
