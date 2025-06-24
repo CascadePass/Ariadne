@@ -11,8 +11,4 @@
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="Testability\" />
-	</ItemGroup>
-
 </Project>

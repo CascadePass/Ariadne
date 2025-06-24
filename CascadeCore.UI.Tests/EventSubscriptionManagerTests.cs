@@ -95,7 +95,6 @@ namespace CascadePass.CascadeCore.UI.Tests
             Assert.AreEqual(2, callCount);
 
             manager.UnsubscribeAll();
-            //manager.Unsubscribe(publisher, nameof(Publisher.SomethingHappened));
             callCount = 0;
             publisher.Raise();
 
