@@ -5,94 +5,161 @@ namespace CascadePass.CascadeCore.UI
 {
     public class EventSubscriptionManager
     {
-        private readonly Dictionary<object, List<Delegate>> handlers;
+        private readonly object syncRoot = new();
+        private readonly Dictionary<WeakReference<object>, List<HandlerInfo>> handlers = new();
 
-        public EventSubscriptionManager() {
-            this.handlers = [];
+        private class HandlerInfo
+        {
+            public string EventName { get; set; }
+            public Delegate Handler { get; set; }
         }
 
         public bool Subscribe<T>(T source, string eventName, Delegate handler) where T : class
         {
             if (source == null || handler == null || string.IsNullOrEmpty(eventName))
-            {
                 return false;
-            }
 
             var eventInfo = typeof(T).GetEvent(eventName);
-            if (eventInfo == null)
-            {
+            if (eventInfo == null || !eventInfo.EventHandlerType.IsAssignableFrom(handler.GetType()))
                 return false;
-            }
 
             eventInfo.AddEventHandler(source, handler);
+            var weakRef = new WeakReference<object>(source);
 
-            if (!handlers.TryGetValue(source, out var list))
+            lock (syncRoot)
             {
-                handlers[source] = list = [];
+                CleanupDeadReferences();
+
+                if (!handlers.TryGetValue(weakRef, out var list))
+                {
+                    list = new List<HandlerInfo>();
+                    handlers[weakRef] = list;
+                }
+
+                list.Add(new HandlerInfo { EventName = eventName, Handler = handler });
             }
 
-            list.Add(handler);
             return true;
         }
 
         public bool Unsubscribe<T>(T source, string eventName) where T : class
         {
-            if (source == null || !handlers.TryGetValue(source, out var foundHandlers)) return false;
+            if (source == null)
+                return false;
+
+            WeakReference<object>? weakRef;
+            List<HandlerInfo> foundHandlers;
+
+            lock (syncRoot)
+            {
+                CleanupDeadReferences();
+                weakRef = FindWeakReference(source);
+                if (weakRef == null || !handlers.TryGetValue(weakRef, out foundHandlers))
+                    return false;
+            }
 
             var eventInfo = typeof(T).GetEvent(eventName);
-            if (eventInfo == null) return false;
+            if (eventInfo == null)
+                return false;
 
-            foreach (var handler in foundHandlers)
-                eventInfo.RemoveEventHandler(source, handler);
+            foundHandlers.RemoveAll(h =>
+            {
+                if (h.EventName == eventName)
+                {
+                    eventInfo.RemoveEventHandler(source, h.Handler);
+                    return true;
+                }
+                return false;
+            });
 
-            this.handlers.Remove(source);
+            lock (syncRoot)
+            {
+                if (foundHandlers.Count == 0 && weakRef != null)
+                    handlers.Remove(weakRef);
+            }
+
             return true;
         }
 
         public bool Unsubscribe<T>(T source) where T : class
         {
-            if (source == null || !handlers.TryGetValue(source, out var foundHandlers))
+            if (source == null)
                 return false;
 
-            var type = typeof(T);
-            bool unsubscribed = false;
-            foreach (var handler in foundHandlers)
+            WeakReference<object>? weakRef;
+            List<HandlerInfo> foundHandlers;
+
+            lock (syncRoot)
             {
-                // Try to find the event that this handler is attached to
-                var method = handler.Method;
-                // Find all events on the type
-                foreach (var eventInfo in type.GetEvents())
-                {
-                    // Check if the handler's method matches the event's handler type
-                    if (eventInfo.EventHandlerType == handler.GetType() || eventInfo.EventHandlerType == handler.Method.DeclaringType)
-                    {
-                        try
-                        {
-                            eventInfo.RemoveEventHandler(source, handler);
-                            unsubscribed = true;
-                        }
-                        catch { /* ignore errors for mismatched handlers */ }
-                    }
-                }
+                CleanupDeadReferences();
+                weakRef = FindWeakReference(source);
+                if (weakRef == null || !handlers.TryGetValue(weakRef, out foundHandlers))
+                    return false;
             }
-            handlers.Remove(source);
-            return unsubscribed;
+
+            var type = typeof(T);
+            foreach (var info in foundHandlers)
+            {
+                var eventInfo = type.GetEvent(info.EventName);
+                eventInfo?.RemoveEventHandler(source, info.Handler);
+            }
+
+            lock (syncRoot)
+            {
+                if (weakRef != null)
+                    handlers.Remove(weakRef);
+            }
+
+            return true;
         }
 
         public void UnsubscribeAll()
         {
-            foreach (var (source, handlers) in handlers)
+            lock (syncRoot)
             {
-                var type = source.GetType();
-                foreach (var handler in handlers)
+                CleanupDeadReferences();
+
+                foreach (var entry in handlers)
                 {
-                    var eventInfo = type.GetEvent(handler.Method.Name);
-                    eventInfo?.RemoveEventHandler(source, handler);
+                    if (entry.Key.TryGetTarget(out var target))
+                    {
+                        var type = target.GetType();
+                        foreach (var info in entry.Value)
+                        {
+                            var eventInfo = type.GetEvent(info.EventName);
+                            eventInfo?.RemoveEventHandler(target, info.Handler);
+                        }
+                    }
                 }
+
+                handlers.Clear();
+            }
+        }
+
+        private void CleanupDeadReferences()
+        {
+            var deadRefs = new List<WeakReference<object>>();
+
+            foreach (var kvp in handlers)
+            {
+                if (!kvp.Key.TryGetTarget(out _))
+                    deadRefs.Add(kvp.Key);
             }
 
-            handlers.Clear();
+            foreach (var deadRef in deadRefs)
+            {
+                handlers.Remove(deadRef);
+            }
+        }
+
+        private WeakReference<object>? FindWeakReference(object target)
+        {
+            foreach (var weakRef in handlers.Keys)
+            {
+                if (weakRef.TryGetTarget(out var obj) && ReferenceEquals(obj, target))
+                    return weakRef;
+            }
+            return null;
         }
     }
-
 }

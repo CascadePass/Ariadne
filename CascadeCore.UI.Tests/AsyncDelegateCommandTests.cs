@@ -38,7 +38,7 @@ namespace CascadePass.CascadeCore.UI.Tests
 
             await command.ExecuteAsync(null, progress);
 
-            Thread.Sleep(100);
+            Thread.Sleep(150);
             Assert.AreEqual(42, reportedProgress);
         }
 
