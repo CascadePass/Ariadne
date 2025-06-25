@@ -3,10 +3,15 @@ using System.Collections.Generic;
 
 namespace CascadePass.CascadeCore.UI
 {
-    public class EventSubscriptionManager
+    public class EventSubscriptionManager : IEventSubscriptionManager
     {
-        private readonly object syncRoot = new();
-        private readonly Dictionary<WeakReference<object>, List<HandlerInfo>> handlers = new();
+        private readonly object syncRoot;
+        private readonly Dictionary<WeakReference<object>, List<HandlerInfo>> handlers;
+
+        public EventSubscriptionManager() {
+            this.syncRoot = new();
+            this.handlers = [];
+        }
 
         private class HandlerInfo
         {
