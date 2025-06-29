@@ -12,9 +12,17 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="Images\AriadneIcon.png" />
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\CascadeCore.UI\CascadeCore.UI.csproj" />
     <ProjectReference Include="..\DatabaseSupernova.Core\DatabaseSupernova.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\AriadneIcon.png" />
   </ItemGroup>
 
 </Project>

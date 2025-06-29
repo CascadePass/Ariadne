@@ -3,10 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CascadePass.DatabaseSupernova"
+        xmlns:local="clr-namespace:CascadePass.DatabaseSupernova.UI"
+        xmlns:chrome="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        ThemeMode="Dark"
+        Background="Black"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        Icon="/Images/AriadneIcon.png"
+        Height="450" Width="800">
+    <Window.DataContext>
+        <local:WorkspaceViewModel />
+    </Window.DataContext>
 
-    </Grid>
+    <WindowChrome.WindowChrome>
+        <chrome:WindowChrome
+            CaptionHeight="0"
+            CornerRadius="8"
+            GlassFrameThickness="0"
+            ResizeBorderThickness="6"/>
+    </WindowChrome.WindowChrome>
+
+    <Border x:Name="MainBorder" CornerRadius="8" Background="Black" BorderBrush="Gray" BorderThickness="1">
+        <StackPanel>
+            <local:TitleBar MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" />
+        </StackPanel>
+
+    </Border>
 </Window>
