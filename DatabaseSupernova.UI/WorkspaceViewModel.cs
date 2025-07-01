@@ -1,18 +1,19 @@
 ﻿using CascadePass.CascadeCore.UI;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace CascadePass.DatabaseSupernova.UI
 {
     public class WorkspaceViewModel : ViewModel
     {
-        private bool isSearchVisible, isNavigationTrayExpanded, isSettingsPageVisible;
+        private bool isSearchVisible, isNavigationTrayExpanded;
         private ObservableCollection<NavigationItem> navOptions;
+        private NavigationItem settingsNavigationItem;
 
         public WorkspaceViewModel()
         {
-            this.NavigationOptions = [];
             this.NavigationCommands = new() { WorkspaceViewModel = this, };
+
+            this.NavigationOptions = [];
             this.CreateNavigationItems();
         }
 
@@ -30,20 +31,32 @@ namespace CascadePass.DatabaseSupernova.UI
             set => this.SetPropertyValue(ref this.isNavigationTrayExpanded, value, nameof(this.IsNavigationTrayExpanded));
         }
 
-        public bool IsSettingsPageVisible
-        {
-            get => this.isSettingsPageVisible;
-            set => this.SetPropertyValue(ref this.isSettingsPageVisible, value, nameof(this.IsSettingsPageVisible));
-        }
-
         public ObservableCollection<NavigationItem> NavigationOptions
         {
             get => navOptions;
             set => this.SetPropertyValue(ref navOptions, value, nameof(this.NavigationOptions));
         }
 
+        public NavigationItem SettingsNavigationItem
+        {
+            get => this.settingsNavigationItem;
+            set => this.SetPropertyValue(ref this.settingsNavigationItem, value, nameof(this.SettingsNavigationItem));
+        }
+
         protected void CreateNavigationItems()
         {
+            //TODO: Load this from a configuration file or similar.
+
+            this.SettingsNavigationItem = new NavigationItem
+            {
+                Label = DisplayText.Settings,
+                Icon = "/Images/Navigation/Settings.Icon.Dark.png",
+                SelectedIcon = "/Images/Navigation/Settings.Icon.Selected.png",
+                Command = this.NavigationCommands.ShowFeatureCommand,
+                CommandParameter = AriadneFeature.Settings,
+            };
+
+
             this.NavigationOptions.Add(new NavigationItem
             {
                 Icon = "/Images/Navigation/Menu.Icon.Dark.png",
@@ -101,39 +114,7 @@ namespace CascadePass.DatabaseSupernova.UI
                 item.IsSelected = (AriadneFeature)item.CommandParameter == feature;
             }
 
-            this.IsSettingsPageVisible = feature == AriadneFeature.Settings;
-        }
-    }
-
-    public class NavigationCommands
-    {
-        private DelegateCommand toggleNavigationTrayExpansionCommand;
-        private DelegateCommand showFeatureCommand;
-
-        public WorkspaceViewModel WorkspaceViewModel { get; set; }
-
-        public DelegateCommand ToggleNavigationTrayExpansionCommand => this.toggleNavigationTrayExpansionCommand ??= new(this.ToggleNavigationTrayExpansionImplementation);
-
-        public DelegateCommand ShowFeatureCommand => this.showFeatureCommand ??= new(this.ShowFeatureImplementation);
-
-        protected void ToggleNavigationTrayExpansionImplementation()
-        {
-            this.WorkspaceViewModel.IsNavigationTrayExpanded = !this.WorkspaceViewModel.IsNavigationTrayExpanded;
-
-            var navItem = this.WorkspaceViewModel.NavigationOptions.FirstOrDefault(item => item.Command == this.ToggleNavigationTrayExpansionCommand);
-
-            if (navItem is not null)
-            {
-                navItem.ShowSelectedIcon = this.WorkspaceViewModel.IsNavigationTrayExpanded;
-            }
-        }
-
-        protected void ShowFeatureImplementation(object state)
-        {
-            if (state is AriadneFeature feature)
-            {
-                this.WorkspaceViewModel.ShowPage(feature);
-            }
+            this.SettingsNavigationItem.IsSelected = feature == AriadneFeature.Settings;
         }
     }
 }
