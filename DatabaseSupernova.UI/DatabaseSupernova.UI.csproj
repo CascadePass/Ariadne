@@ -14,6 +14,23 @@
 
 	<ItemGroup>
 	  <None Remove="Images\AriadneIcon.png" />
+	  <None Remove="Images\Column.Icon.Dark.png" />
+	  <None Remove="Images\Column.Icon.Light.png" />
+	  <None Remove="Images\Column.Icon.Selected.png" />
+	  <None Remove="Images\Home.Icon.Dark.png" />
+	  <None Remove="Images\Home.Icon.Light.png" />
+	  <None Remove="Images\Home.Icon.Selected.png" />
+	  <None Remove="Images\Locksmith.Icon.Dark.png" />
+	  <None Remove="Images\Locksmith.Icon.Light.png" />
+	  <None Remove="Images\Locksmith.Icon.Selected.png" />
+	  <None Remove="Images\Menu.Icon.Dark.png" />
+	  <None Remove="Images\Menu.Icon.Light.png" />
+	  <None Remove="Images\Menu.Icon.Selected.png" />
+	  <None Remove="Images\Services.Icon.Dark.png" />
+	  <None Remove="Images\Services.Icon.Selected.png" />
+	  <None Remove="Images\Settings.Icon.Dark.png" />
+	  <None Remove="Images\Settings.Icon.Light.png" />
+	  <None Remove="Images\Settings.Icon.Selected.png" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -23,6 +40,38 @@
 
   <ItemGroup>
     <Resource Include="Images\AriadneIcon.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Services.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Services.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Selected.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DisplayText.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DisplayText.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="DisplayText.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayText.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
