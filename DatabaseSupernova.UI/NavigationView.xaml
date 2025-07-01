@@ -49,11 +49,11 @@
             <local:NavigationButton
                 Grid.Row="1"
                 Label="{x:Static local:DisplayText.Settings}"
-                Icon="/Images/Navigation/Settings.Icon.Dark.png"
+                Icon="{Binding SettingsNavigationItem.IconPath}"
                 VerticalAlignment="Bottom"
                 Command="{Binding NavigationCommands.ShowFeatureCommand}"
                 CommandParameter="{x:Static local:AriadneFeature.Settings}"
-                IsSelected="{Binding IsSettingsPageVisible}" />
+                IsSelected="{Binding SettingsNavigationItem.IsSelected}" />
             
             <ItemsControl Grid.Row="0" ItemsSource="{Binding NavigationOptions, Mode=OneWay}" Padding="0">
                 <ItemsControl.ItemTemplate>
