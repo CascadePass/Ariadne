@@ -123,6 +123,12 @@
   <data name="Columns" xml:space="preserve">
     <value>Columns</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="LockSmith" xml:space="preserve">
+    <value>Lock Smith</value>
+  </data>
   <data name="ServiceRemoteControl" xml:space="preserve">
     <value>Services</value>
   </data>

@@ -1,5 +1,6 @@
 ﻿using CascadePass.CascadeCore.UI;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CascadePass.DatabaseSupernova.UI
 {
@@ -52,7 +53,7 @@ namespace CascadePass.DatabaseSupernova.UI
 
             this.NavigationOptions.Add(new NavigationItem
             {
-                Label = "Home",
+                Label = DisplayText.Home,
                 Icon = "/Images/Navigation/Home.Icon.Dark.png",
                 SelectedIcon = "/Images/Navigation/Home.Icon.Selected.png",
                 Command = this.NavigationCommands.ShowFeatureCommand,
@@ -80,18 +81,12 @@ namespace CascadePass.DatabaseSupernova.UI
 
             this.NavigationOptions.Add(new NavigationItem
             {
-                Label = "Lock Smith",
+                Label = DisplayText.LockSmith,
                 Icon = "/Images/Navigation/Locksmith.Icon.Dark.png",
                 SelectedIcon = "/Images/Navigation/Locksmith.Icon.Selected.png",
                 Command = this.NavigationCommands.ShowFeatureCommand,
                 CommandParameter = AriadneFeature.LockSmith,
             });
-
-            //this.NavigationOptions.Add(new NavigationItem
-            //{
-            //    Label = "About",
-            //    Icon = "/Images/AriadneIcon.png",
-            //});
         }
 
         public void ShowPage(AriadneFeature feature)
@@ -117,19 +112,21 @@ namespace CascadePass.DatabaseSupernova.UI
 
         public WorkspaceViewModel WorkspaceViewModel { get; set; }
 
-        public DelegateCommand ToggleNavigationTrayExpansionCommand
-        {
-            get
-            {
-                return this.toggleNavigationTrayExpansionCommand ??= new DelegateCommand(
-                    () =>
-                    {
-                        this.WorkspaceViewModel.IsNavigationTrayExpanded = !this.WorkspaceViewModel.IsNavigationTrayExpanded;
-                    });
-            }
-        }
+        public DelegateCommand ToggleNavigationTrayExpansionCommand => this.toggleNavigationTrayExpansionCommand ??= new(this.ToggleNavigationTrayExpansionImplementation);
 
         public DelegateCommand ShowFeatureCommand => this.showFeatureCommand ??= new(this.ShowFeatureImplementation);
+
+        protected void ToggleNavigationTrayExpansionImplementation()
+        {
+            this.WorkspaceViewModel.IsNavigationTrayExpanded = !this.WorkspaceViewModel.IsNavigationTrayExpanded;
+
+            var navItem = this.WorkspaceViewModel.NavigationOptions.FirstOrDefault(item => item.Command == this.ToggleNavigationTrayExpansionCommand);
+
+            if (navItem is not null)
+            {
+                navItem.ShowSelectedIcon = this.WorkspaceViewModel.IsNavigationTrayExpanded;
+            }
+        }
 
         protected void ShowFeatureImplementation(object state)
         {
@@ -138,16 +135,5 @@ namespace CascadePass.DatabaseSupernova.UI
                 this.WorkspaceViewModel.ShowPage(feature);
             }
         }
-    }
-
-    public enum AriadneFeature
-    {
-        None,
-        Home,
-        Services,
-        Columns,
-        LockSmith,
-        About,
-        Settings,
     }
 }

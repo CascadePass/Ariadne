@@ -79,7 +79,25 @@ namespace CascadePass.DatabaseSupernova.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service Remote Control.
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock Smith.
+        /// </summary>
+        public static string LockSmith {
+            get {
+                return ResourceManager.GetString("LockSmith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Services.
         /// </summary>
         public static string ServiceRemoteControl {
             get {

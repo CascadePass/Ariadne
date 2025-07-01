@@ -18,10 +18,10 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Width"
-                                 To="200"
-                                 Duration="0:0:0.3"
-                                 AccelerationRatio="0.2"
-                                 DecelerationRatio="0.8"/>
+                                         To="160"
+                                         Duration="0:0:0.3"
+                                         AccelerationRatio="0.2"
+                                         DecelerationRatio="0.8"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </DataTrigger.EnterActions>
@@ -29,10 +29,10 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Width"
-                                 To="60"
-                                 Duration="0:0:0.3"
-                                 AccelerationRatio="0.2"
-                                 DecelerationRatio="0.8"/>
+                                         To="60"
+                                         Duration="0:0:0.3"
+                                         AccelerationRatio="0.2"
+                                         DecelerationRatio="0.8"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </DataTrigger.ExitActions>

@@ -50,7 +50,7 @@
             Padding="8"
             Cursor="Hand">
             <StackPanel Orientation="Horizontal">
-                <Border BorderBrush="Red" Height="12">
+                <Border BorderBrush="{DynamicResource NavigationDrawer.SelectedIcon.Border.Background}" Height="12">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Setter Property="BorderThickness" Value="0" />
