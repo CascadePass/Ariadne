@@ -102,7 +102,7 @@
 
             <TextBlock
                 Grid.Column="1"
-                Text="Ariadne"
+                Text="{x:Static local:DisplayText.ApplicationTitle}"
                 Foreground="{DynamicResource WindowChrome.Foreground}"
                 Margin="10,0,0,0"
                 VerticalAlignment="Center" />

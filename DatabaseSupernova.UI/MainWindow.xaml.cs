@@ -21,7 +21,7 @@ namespace CascadePass.DatabaseSupernova
         public MainWindow()
         {
             this.InitializeComponent();
-            this.Loaded += (_, __) => ApplyRoundedCorners();
+            this.Loaded += (_, __) => this.ApplyRoundedCorners();
         }
 
         private void ApplyRoundedCorners()

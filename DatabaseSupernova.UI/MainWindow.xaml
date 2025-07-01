@@ -11,6 +11,7 @@
         WindowStyle="None"
         AllowsTransparency="False"
         Icon="/Images/AriadneIcon.png"
+        Title="{x:Static local:DisplayText.ApplicationTitle}"
         Height="450" Width="800">
     <Window.DataContext>
         <local:WorkspaceViewModel />
@@ -25,9 +26,14 @@
     </WindowChrome.WindowChrome>
 
     <Border x:Name="MainBorder" CornerRadius="8" Background="Black" BorderBrush="Gray" BorderThickness="1">
-        <StackPanel>
-            <local:TitleBar MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" />
-        </StackPanel>
+        <DockPanel>
+            <local:TitleBar DockPanel.Dock="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" />
+            <local:NavigationView x:Name="NavigationView" DockPanel.Dock="Left" IsExpanded="{Binding IsNavigationTrayExpanded}" />
+
+            <Border CornerRadius="12" Background="Black" BorderBrush="Red" BorderThickness="0">
+                <ContentPresenter />
+            </Border>
+        </DockPanel>
 
     </Border>
 </Window>
