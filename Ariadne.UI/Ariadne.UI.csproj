@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>CascadePass.Ariadne.UI</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CascadePass.Core.UI\CascadePass.Core.UI.csproj" />
+    <ProjectReference Include="..\Ariadne.Core\Ariadne.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\AriadneIcon.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Column.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Home.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Locksmith.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Menu.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Services.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Services.Icon.Selected.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Dark.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Light.png" />
+    <Resource Include="Images\Navigation\Settings.Icon.Selected.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DisplayText.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DisplayText.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="DisplayText.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayText.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

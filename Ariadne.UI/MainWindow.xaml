@@ -1,0 +1,39 @@
+﻿<Window x:Class="CascadePass.Ariadne.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CascadePass.Ariadne.UI"
+        xmlns:chrome="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        mc:Ignorable="d"
+        ThemeMode="Dark"
+        Background="Black"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        Icon="/Images/AriadneIcon.png"
+        Title="{x:Static local:DisplayText.ApplicationTitle}"
+        Height="450" Width="800">
+    <Window.DataContext>
+        <local:WorkspaceViewModel />
+    </Window.DataContext>
+
+    <WindowChrome.WindowChrome>
+        <chrome:WindowChrome
+            CaptionHeight="0"
+            CornerRadius="8"
+            GlassFrameThickness="0"
+            ResizeBorderThickness="6"/>
+    </WindowChrome.WindowChrome>
+
+    <Border x:Name="MainBorder" CornerRadius="8" Background="Black" BorderBrush="Gray" BorderThickness="1">
+        <DockPanel>
+            <local:TitleBar DockPanel.Dock="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" />
+            <local:NavigationView x:Name="NavigationView" DockPanel.Dock="Left" IsExpanded="{Binding IsNavigationTrayExpanded}" />
+
+            <Border CornerRadius="12" Background="Black" BorderBrush="Red" BorderThickness="0">
+                <ContentPresenter Content="{Binding CurrentPage}" />
+            </Border>
+        </DockPanel>
+
+    </Border>
+</Window>
