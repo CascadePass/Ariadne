@@ -108,10 +108,11 @@
                 VerticalAlignment="Center" />
         </Grid>
 
-        <TextBox
+        <ComboBox
             Width="100" Height="20"
             Margin="100,5,0,0"
             VerticalAlignment="Top"
+            IsEditable="True"
             WindowChrome.IsHitTestVisibleInChrome="True"
             Visibility="{Binding IsSearchVisible, Converter={StaticResource bool2visibility}}"
             />

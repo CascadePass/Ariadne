@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ariadne.Feature.ColumnFinder\Ariadne.Feature.ColumnFinder.csproj" />
     <ProjectReference Include="..\CascadePass.Core.UI\CascadePass.Core.UI.csproj" />
     <ProjectReference Include="..\Ariadne.Core\Ariadne.Core.csproj" />
   </ItemGroup>

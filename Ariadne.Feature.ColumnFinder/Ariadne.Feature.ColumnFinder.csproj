@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>CascadePass.Ariadne.ColumnFinder</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ariadne.Core\Ariadne.Core.csproj" />
+    <ProjectReference Include="..\CascadePass.Core.UI\CascadePass.Core.UI.csproj" />
+  </ItemGroup>
+
+</Project>

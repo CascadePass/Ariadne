@@ -113,7 +113,7 @@ namespace CascadePass.Ariadne.UI
 
         public void ShowPage(AriadneFeature feature)
         {
-            foreach(var item in this.NavigationOptions)
+            foreach (var item in this.NavigationOptions)
             {
                 if (item.Command is not DelegateCommand command || item.CommandParameter is not AriadneFeature)
                 {
@@ -125,7 +125,14 @@ namespace CascadePass.Ariadne.UI
 
             this.SettingsNavigationItem.IsSelected = feature == AriadneFeature.Settings;
 
-            this.CurrentPage = new TextBlock() { Text = feature.ToString() };
+
+            this.CurrentPage = feature switch
+            {
+                AriadneFeature.Columns => new ColumnFinder.ColumnFinderView(),
+                _ => new TextBlock() { Text = feature.ToString() },
+            };
+
+            this.IsSearchVisible = feature == AriadneFeature.Columns;
         }
     }
 }
