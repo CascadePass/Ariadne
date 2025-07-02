@@ -26,7 +26,7 @@ namespace CascadePass.Core.UI.Tests
         [TestMethod]
         public async Task ExecuteAsync_ReportsProgress()
         {
-            int reportedProgress = 0;
+            var tcs = new TaskCompletionSource<int>();
             var command = new AsyncDelegateCommand<int>(
                 async (param, token, progress) =>
                 {
@@ -34,11 +34,11 @@ namespace CascadePass.Core.UI.Tests
                     await Task.CompletedTask;
                 });
 
-            var progress = new Progress<int>(val => reportedProgress = val);
+            var progress = new Progress<int>(val => tcs.SetResult(val));
 
             await command.ExecuteAsync(null, progress);
 
-            Thread.Sleep(500);
+            var reportedProgress = await tcs.Task; // this guarantees value receipt
             Assert.AreEqual(42, reportedProgress);
         }
 
