@@ -1,5 +1,7 @@
 ﻿using CascadePass.CascadeCore.UI;
 using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CascadePass.DatabaseSupernova.UI
 {
@@ -8,6 +10,7 @@ namespace CascadePass.DatabaseSupernova.UI
         private bool isSearchVisible, isNavigationTrayExpanded;
         private ObservableCollection<NavigationItem> navOptions;
         private NavigationItem settingsNavigationItem;
+        private FrameworkElement currentPage;
 
         public WorkspaceViewModel()
         {
@@ -18,6 +21,12 @@ namespace CascadePass.DatabaseSupernova.UI
         }
 
         public NavigationCommands NavigationCommands { get; }
+
+        public FrameworkElement CurrentPage
+        {
+            get => this.currentPage;
+            set => this.SetPropertyValue(ref this.currentPage, value, nameof(this.CurrentPage));
+        }
 
         public bool IsSearchVisible
         {
@@ -115,6 +124,8 @@ namespace CascadePass.DatabaseSupernova.UI
             }
 
             this.SettingsNavigationItem.IsSelected = feature == AriadneFeature.Settings;
+
+            this.CurrentPage = new TextBlock() { Text = feature.ToString() };
         }
     }
 }

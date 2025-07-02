@@ -31,7 +31,7 @@
             <local:NavigationView x:Name="NavigationView" DockPanel.Dock="Left" IsExpanded="{Binding IsNavigationTrayExpanded}" />
 
             <Border CornerRadius="12" Background="Black" BorderBrush="Red" BorderThickness="0">
-                <ContentPresenter />
+                <ContentPresenter Content="{Binding CurrentPage}" />
             </Border>
         </DockPanel>
 
