@@ -78,61 +78,6 @@ namespace CascadePass.Core.UI.Tests
             Assert.AreEqual(1, eventCount, "Expected only one RegistryAccessed event to be raised.");
         }
 
-        [TestMethod]
-        public async Task GetValue_RaisesRegistryAccessedAsyncEvent()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = "AsyncKey";
-            string valueName = "AsyncValue";
-
-            RegistryAccessEventArgs receivedArgs = null;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                receivedArgs = args;
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.GetValue(keyName, valueName);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500)); // Wait for async event or timeout
-
-            Assert.IsNull(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not complete in time.");
-            Assert.IsNotNull(receivedArgs);
-            Assert.AreEqual(RegistryAccessType.Read, receivedArgs.AccessType);
-            Assert.AreEqual(keyName, receivedArgs.KeyName);
-            Assert.AreEqual(valueName, receivedArgs.ValueName);
-        }
-
-        [TestMethod]
-        public async Task GetValue_RaisesRegistryAccessedAsyncEvent_OnlyOnce()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = "AsyncKey_Single";
-            string valueName = "AsyncValue_Single";
-
-            int asyncCount = 0;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                Interlocked.Increment(ref asyncCount);
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.GetValue(keyName, valueName);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500));
-
-            Assert.IsNull(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not fire.");
-            Assert.AreEqual(1, asyncCount, "Expected only one async event invocation.");
-        }
-
         #endregion
 
         #region SetValue Tests
@@ -217,63 +162,6 @@ namespace CascadePass.Core.UI.Tests
             Assert.AreEqual(1, eventCount, "Expected only one RegistryAccessed event to be raised.");
         }
 
-        [TestMethod]
-        public async Task SetValue_RaisesRegistryAccessedAsyncEvent()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = $"{TestKeyPrefix}\\AsyncKey";
-            string valueName = "AsyncValue";
-            string value = "AsyncValue";
-
-            RegistryAccessEventArgs receivedArgs = null;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                receivedArgs = args;
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.SetValue(keyName, valueName, value, RegistryValueKind.String);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500)); // Wait for async event or timeout
-
-            Assert.IsTrue(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not complete in time.");
-            Assert.IsNotNull(receivedArgs);
-            Assert.AreEqual(RegistryAccessType.Write, receivedArgs.AccessType);
-            Assert.AreEqual(keyName, receivedArgs.KeyName);
-            Assert.AreEqual(valueName, receivedArgs.ValueName);
-        }
-
-        [TestMethod]
-        public async Task SetValue_RaisesRegistryAccessedAsyncEvent_OnlyOnce()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = $"{TestKeyPrefix}\\AsyncKey_Single";
-            string valueName = "AsyncValue_Single";
-            string value = "AsyncValue_Single";
-
-            int asyncCount = 0;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                Interlocked.Increment(ref asyncCount);
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.SetValue(keyName, valueName, value, RegistryValueKind.String);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500));
-
-            Assert.IsTrue(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not fire.");
-            Assert.AreEqual(1, asyncCount, "Expected only one async event invocation.");
-        }
-
         #endregion
 
         #region DeleteValue Tests
@@ -351,61 +239,6 @@ namespace CascadePass.Core.UI.Tests
 
             Assert.IsTrue(result);
             Assert.AreEqual(1, eventCount, "Expected only one RegistryAccessed event to be raised.");
-        }
-
-        [TestMethod]
-        public async Task DeleteValue_RaisesRegistryAccessedAsyncEvent()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = $"{TestKeyPrefix}\\AsyncKey";
-            string valueName = "AsyncValue";
-
-            RegistryAccessEventArgs receivedArgs = null;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                receivedArgs = args;
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.DeleteValue(keyName, valueName);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500)); // Wait for async event or timeout
-
-            Assert.IsTrue(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not complete in time.");
-            Assert.IsNotNull(receivedArgs);
-            Assert.AreEqual(RegistryAccessType.Delete, receivedArgs.AccessType);
-            Assert.AreEqual(keyName, receivedArgs.KeyName);
-            Assert.AreEqual(valueName, receivedArgs.ValueName);
-        }
-
-        [TestMethod]
-        public async Task DeleteValue_RaisesRegistryAccessedAsyncEvent_OnlyOnce()
-        {
-            var registryProvider = new RegistryProvider();
-            string keyName = $"{TestKeyPrefix}\\AsyncKey_Single";
-            string valueName = "AsyncValue_Single";
-
-            int asyncCount = 0;
-            var tcs = new TaskCompletionSource<bool>();
-
-            registryProvider.RegistryAccessedAsync += async (sender, args) =>
-            {
-                Interlocked.Increment(ref asyncCount);
-                tcs.SetResult(true);
-                await Task.CompletedTask;
-            };
-
-            var result = registryProvider.DeleteValue(keyName, valueName);
-
-            await Task.WhenAny(tcs.Task, Task.Delay(500));
-
-            Assert.IsTrue(result);
-            Assert.IsTrue(tcs.Task.IsCompleted, "Async event did not fire.");
-            Assert.AreEqual(1, asyncCount, "Expected only one async event invocation.");
         }
 
         #endregion

@@ -1,5 +1,8 @@
-﻿using CascadePass.Core.UI;
+﻿using Ariadne.Framework;
+using CascadePass.Core.UI;
+using CascadePass.Core.UI.Controls;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,6 +12,7 @@ namespace CascadePass.Ariadne.UI
     {
         private bool isSearchVisible, isNavigationTrayExpanded;
         private ObservableCollection<NavigationItem> navOptions;
+        private NavigationItem selectedNavOption;
         private NavigationItem settingsNavigationItem;
         private FrameworkElement currentPage;
 
@@ -20,7 +24,7 @@ namespace CascadePass.Ariadne.UI
             this.CreateNavigationItems();
         }
 
-        public NavigationCommands NavigationCommands { get; }
+        public AriadneNavigationCommands NavigationCommands { get; }
 
         public FrameworkElement CurrentPage
         {
@@ -46,6 +50,12 @@ namespace CascadePass.Ariadne.UI
             set => this.SetPropertyValue(ref navOptions, value, nameof(this.NavigationOptions));
         }
 
+        public NavigationItem SelectedNavigationOption
+        {
+            get => this.selectedNavOption;
+            set => this.SetPropertyValue(ref this.selectedNavOption, value, nameof(this.SelectedNavigationOption));
+        }
+
         public NavigationItem SettingsNavigationItem
         {
             get => this.settingsNavigationItem;
@@ -56,22 +66,22 @@ namespace CascadePass.Ariadne.UI
         {
             //TODO: Load this from a configuration file or similar.
 
-            this.SettingsNavigationItem = new NavigationItem
-            {
-                Label = DisplayText.Settings,
-                Icon = "/Images/Navigation/Settings.Icon.Dark.png",
-                SelectedIcon = "/Images/Navigation/Settings.Icon.Selected.png",
-                Command = this.NavigationCommands.ShowFeatureCommand,
-                CommandParameter = AriadneFeature.Settings,
-            };
+            //this.SettingsNavigationItem = new NavigationItem
+            //{
+            //    Label = DisplayText.Settings,
+            //    Icon = "/Images/Navigation/Settings.Icon.Dark.png",
+            //    SelectedIcon = "/Images/Navigation/Settings.Icon.Selected.png",
+            //    Command = this.NavigationCommands.ShowFeatureCommand,
+            //    CommandParameter = AriadneFeature.Settings,
+            //};
 
 
-            this.NavigationOptions.Add(new NavigationItem
-            {
-                Icon = "/Images/Navigation/Menu.Icon.Dark.png",
-                SelectedIcon = "/Images/Navigation/Menu.Icon.Selected.png",
-                Command = this.NavigationCommands.ToggleNavigationTrayExpansionCommand,
-            });
+            //this.NavigationOptions.Add(new NavigationItem
+            //{
+            //    Icon = "/Images/Navigation/Menu.Icon.Dark.png",
+            //    SelectedIcon = "/Images/Navigation/Menu.Icon.Selected.png",
+            //    Command = this.NavigationCommands.ToggleNavigationTrayExpansionCommand,
+            //});
 
             this.NavigationOptions.Add(new NavigationItem
             {
@@ -120,10 +130,13 @@ namespace CascadePass.Ariadne.UI
                     continue;
                 }
 
-                item.IsSelected = (AriadneFeature)item.CommandParameter == feature;
+                //item.IsSelected = (AriadneFeature)item.CommandParameter == feature;
             }
 
-            this.SettingsNavigationItem.IsSelected = feature == AriadneFeature.Settings;
+            //if (this.SettingsNavigationItem is not null)
+            //{
+            //    this.SettingsNavigationItem.IsSelected = feature == AriadneFeature.Settings;
+            //}
 
 
             this.CurrentPage = feature switch
@@ -132,7 +145,10 @@ namespace CascadePass.Ariadne.UI
                 _ => new TextBlock() { Text = feature.ToString() },
             };
 
-            this.IsSearchVisible = feature == AriadneFeature.Columns;
+            if (this.CurrentPage.DataContext is ViewModel viewModel)
+            {
+                this.IsSearchVisible = viewModel is ISearchable;
+            }
         }
     }
 }

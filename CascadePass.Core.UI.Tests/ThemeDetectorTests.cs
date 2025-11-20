@@ -37,8 +37,7 @@ namespace CascadePass.Core.UI.Tests
             private readonly int? value;
             public StubRegistryProvider(int? appsUseLightTheme) => this.value = appsUseLightTheme;
 
-            public event RegistryProvider.RegistryAccessedHandler RegistryAccessed;
-            public event RegistryProvider.RegistryAccessedAsyncHandler RegistryAccessedAsync;
+            public event EventHandler<RegistryAccessEventArgs> RegistryAccessed;
 
             public bool DeleteValue(string keyName, string valueName)
             {

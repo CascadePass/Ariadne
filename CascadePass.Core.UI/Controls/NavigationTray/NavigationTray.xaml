@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="CascadePass.Ariadne.UI.NavigationView"
+﻿<UserControl x:Class="CascadePass.Core.UI.Controls.NavigationTray"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CascadePass.Ariadne.UI"
+             xmlns:local="clr-namespace:CascadePass.Core.UI.Controls"
              mc:Ignorable="d" 
              Background="{DynamicResource WindowChrome.TitleBar.Background}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,7 +13,7 @@
         <Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsExpanded, RelativeSource={RelativeSource AncestorType=local:NavigationView}}" Value="True">
+                    <DataTrigger Binding="{Binding IsExpanded, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" Value="True">
                         <DataTrigger.EnterActions>
                             <BeginStoryboard>
                                 <Storyboard>
@@ -44,24 +44,32 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <local:NavigationButton
-                Grid.Row="1"
-                Label="{x:Static local:DisplayText.Settings}"
-                Icon="{Binding SettingsNavigationItem.IconPath}"
+                Grid.Row="0"
+                Icon="{Binding ToggleExpansionButton.IconPath, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                 VerticalAlignment="Bottom"
-                Command="{Binding NavigationCommands.ShowFeatureCommand}"
-                CommandParameter="{x:Static local:AriadneFeature.Settings}"
-                IsSelected="{Binding SettingsNavigationItem.IsSelected}" />
-            
-            <ItemsControl Grid.Row="0" ItemsSource="{Binding NavigationOptions, Mode=OneWay}" Padding="0">
+                Command="{Binding ToggleExpansionCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                />
+
+            <local:NavigationButton
+                Grid.Row="2"
+                Label="{Binding SettingsButton.Label, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                Icon="{Binding SettingsButton.IconPath, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                VerticalAlignment="Bottom"
+                Command="{Binding SettingsButton.NavigationCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                CommandParameter="{Binding SettingsButton.CommandParameter, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                IsSelected="{Binding SettingsButton.IsSelected, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" />
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding NavigationItems, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" Padding="0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:NavigationButton
                             Label="{Binding Label}"
                             Icon="{Binding IconPath}"
-                            Command="{Binding Command}"
+                            Command="{Binding NavigationCommand}"
                             CommandParameter="{Binding CommandParameter}"
                             IsSelected="{Binding IsSelected}" />
                     </DataTemplate>

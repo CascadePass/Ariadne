@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CascadePass.Ariadne.UI"
+        xmlns:cascade="clr-namespace:CascadePass.Core.UI.Controls;assembly=CascadePass.Core.UI"
         xmlns:chrome="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         mc:Ignorable="d"
         ThemeMode="Dark"
@@ -28,7 +29,13 @@
     <Border x:Name="MainBorder" CornerRadius="8" Background="Black" BorderBrush="Gray" BorderThickness="1">
         <DockPanel>
             <local:TitleBar DockPanel.Dock="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" />
-            <local:NavigationView x:Name="NavigationView" DockPanel.Dock="Left" IsExpanded="{Binding IsNavigationTrayExpanded}" />
+            <cascade:NavigationTray
+                x:Name="NavigationView"
+                DockPanel.Dock="Left"
+                IsExpanded="{Binding IsNavigationTrayExpanded}"
+                NavigationItems="{Binding NavigationOptions}"
+                SelectedNavigationItem="{Binding SelectedNavigationOption}"
+                />
 
             <Border CornerRadius="12" Background="Black" BorderBrush="Red" BorderThickness="0">
                 <ContentPresenter Content="{Binding CurrentPage}" />
