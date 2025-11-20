@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace CascadePass.Ariadne.UI
+namespace CascadePass.Core.UI.Controls
 {
     /// <summary>
     /// Interaction logic for NavigationButton.xaml

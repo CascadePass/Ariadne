@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ariadne.Core\Ariadne.Core.csproj" />
+    <ProjectReference Include="..\Ariadne.Framework\Ariadne.Framework.csproj" />
     <ProjectReference Include="..\CascadePass.Core.UI\CascadePass.Core.UI.csproj" />
   </ItemGroup>
 
