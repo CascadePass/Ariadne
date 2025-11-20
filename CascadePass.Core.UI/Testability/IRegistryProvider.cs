@@ -1,11 +1,11 @@
 ﻿using Microsoft.Win32;
+using System;
 
 namespace CascadePass.Core.UI
 {
     public interface IRegistryProvider
     {
-        event RegistryProvider.RegistryAccessedHandler RegistryAccessed;
-        event RegistryProvider.RegistryAccessedAsyncHandler RegistryAccessedAsync;
+        event EventHandler<RegistryAccessEventArgs> RegistryAccessed;
 
         bool DeleteValue(string keyName, string valueName);
         string[] GetSubKeyNames(string keyName);
