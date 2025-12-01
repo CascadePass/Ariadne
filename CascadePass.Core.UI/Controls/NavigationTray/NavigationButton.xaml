@@ -75,6 +75,7 @@
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
+                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     Style="{StaticResource NavLabelStyle}">
                     <TextBlock.RenderTransform>
                         <TranslateTransform x:Name="TextSlideTransform" X="-20"/>

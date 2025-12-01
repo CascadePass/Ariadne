@@ -58,6 +58,7 @@
                 Grid.Row="2"
                 Label="{Binding SettingsButton.Label, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                 Icon="{Binding SettingsButton.IconPath, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                 VerticalAlignment="Bottom"
                 Command="{Binding SettingsButton.NavigationCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                 CommandParameter="{Binding SettingsButton.CommandParameter, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
@@ -71,6 +72,7 @@
                             Icon="{Binding IconPath}"
                             Command="{Binding NavigationCommand}"
                             CommandParameter="{Binding CommandParameter}"
+                            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                             IsSelected="{Binding IsSelected}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
