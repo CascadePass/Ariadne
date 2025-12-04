@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ariadne.UI", "Ariadne.UI\Ariadne.UI.csproj", "{8FE13A58-0F21-4940-8701-9EB9DBAFE7DC}"
 EndProject
@@ -20,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ariadne.Framework", "Ariadne.Framework\Ariadne.Framework.csproj", "{D5DC651E-6D8C-4B69-A3B1-16066F134D76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CascadePass.Core.Sql", "CascadePass.Core.Sql\CascadePass.Core.Sql.csproj", "{CADAE547-F86B-496E-8EA7-3826170E0E10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CascadePass.Core.Common", "CascadePass.Core.Common\CascadePass.Core.Common.csproj", "{FEB6365F-32AE-403F-9248-762E45B88642}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CascadePass.Core.Common.Tests", "CascadePass.Core.Common.Tests\CascadePass.Core.Common.Tests.csproj", "{93616183-2BBE-4291-9F54-237F955964DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,14 @@ Global
 		{CADAE547-F86B-496E-8EA7-3826170E0E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADAE547-F86B-496E-8EA7-3826170E0E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CADAE547-F86B-496E-8EA7-3826170E0E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB6365F-32AE-403F-9248-762E45B88642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB6365F-32AE-403F-9248-762E45B88642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB6365F-32AE-403F-9248-762E45B88642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB6365F-32AE-403F-9248-762E45B88642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93616183-2BBE-4291-9F54-237F955964DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93616183-2BBE-4291-9F54-237F955964DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93616183-2BBE-4291-9F54-237F955964DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93616183-2BBE-4291-9F54-237F955964DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
