@@ -34,7 +34,13 @@
                 DockPanel.Dock="Left"
                 IsExpanded="{Binding IsNavigationTrayExpanded}"
                 NavigationItems="{Binding NavigationOptions}"
-                SelectedNavigationItem="{Binding SelectedNavigationOption}"
+                SelectedNavigationItem="{Binding SelectedNavigationOption, Mode=TwoWay}"
+                ItemForeground="Yellow"
+                SelectionStripeBrush="{DynamicResource NavigationDrawer.SelectedIcon.Border.Background}"
+                SelectedFontWeight="UltraBlack"
+                SelectedForeground="Yellow"
+                SelectedBackground="Gray"
+                ItemCornerRadius="16"
                 />
 
             <Border CornerRadius="12" Background="Black" BorderBrush="Red" BorderThickness="0">
