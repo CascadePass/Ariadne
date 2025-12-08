@@ -7,10 +7,11 @@
              mc:Ignorable="d" 
              Background="{DynamicResource WindowChrome.TitleBar.Background}"
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Border x:Name="NavTray"
         Width="60"
-        Background="{DynamicResource NavigationBackground}">
-        <Border.Style>
+        Background="{Binding Background, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}">
+        <!--<Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsExpanded, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" Value="True">
@@ -18,7 +19,7 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Width"
-                                         To="160"
+                                         To="{Binding OpenedWidth, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                                          Duration="0:0:0.3"
                                          AccelerationRatio="0.2"
                                          DecelerationRatio="0.8"/>
@@ -29,7 +30,7 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Width"
-                                         To="60"
+                                         To="{Binding ClosedWidth, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                                          Duration="0:0:0.3"
                                          AccelerationRatio="0.2"
                                          DecelerationRatio="0.8"/>
@@ -39,7 +40,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-        </Border.Style>
+        </Border.Style>-->
 
         <Grid>
             <Grid.RowDefinitions>
@@ -50,19 +51,30 @@
             <local:NavigationButton
                 Grid.Row="0"
                 Icon="{Binding ToggleExpansionButton.IconPath, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                VerticalAlignment="Bottom"
                 Command="{Binding ToggleExpansionCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                />
+                SelectionStripeBrush="{Binding SelectionStripeBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Visibility="{Binding ToggleExpansionButton.IsVisible, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource bool2visibility}}"
+                ItemCornerRadius="{Binding ToggleExpansionButton.CornerRadius, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                MouseOverBackground="{Binding MouseOverBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                PressedBackground="{Binding PressedBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+            />
 
             <local:NavigationButton
                 Grid.Row="2"
                 Label="{Binding SettingsButton.Label, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
                 Icon="{Binding SettingsButton.IconPath, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                VerticalAlignment="Bottom"
-                Command="{Binding SettingsButton.NavigationCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                CommandParameter="{Binding SettingsButton.CommandParameter, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                IsSelected="{Binding SettingsButton.IsSelected, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" />
+                ItemForeground="{Binding SettingsButton.Foreground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                ItemBackground="{Binding SettingsButton.Background, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                Command="{Binding SelectAndForwardCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                CommandParameter="{Binding SettingsButton, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                IsSelected="{Binding SettingsButton.IsSelected, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                SelectionStripeBrush="{Binding SelectionStripeBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Visibility="{Binding SettingsButton.IsVisible, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource bool2visibility}}"
+                FontWeight="{Binding SettingsButton.FontWeight, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                ItemCornerRadius="{Binding SettingsButton.CornerRadius, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                MouseOverBackground="{Binding MouseOverBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                PressedBackground="{Binding PressedBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                />
 
             <ItemsControl Grid.Row="1" ItemsSource="{Binding NavigationItems, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}" Padding="0">
                 <ItemsControl.ItemTemplate>
@@ -70,10 +82,18 @@
                         <local:NavigationButton
                             Label="{Binding Label}"
                             Icon="{Binding IconPath}"
-                            Command="{Binding NavigationCommand}"
-                            CommandParameter="{Binding CommandParameter}"
-                            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
-                            IsSelected="{Binding IsSelected}" />
+                            Command="{Binding SelectAndForwardCommand, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                            CommandParameter="{Binding .}"
+                            ItemForeground="{Binding Foreground}"
+                            ItemBackground="{Binding Background}"
+                            IsSelected="{Binding IsSelected}"
+                            SelectionStripeBrush="{Binding SelectionStripeBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Visibility="{Binding IsVisible, Converter={StaticResource bool2visibility}}"
+                            FontWeight="{Binding FontWeight}"
+                            ItemCornerRadius="{Binding CornerRadius}"
+                            MouseOverBackground="{Binding MouseOverBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                            PressedBackground="{Binding PressedBackground, RelativeSource={RelativeSource AncestorType=local:NavigationTray}}"
+                        />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

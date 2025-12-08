@@ -4,9 +4,73 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CascadePass.Core.UI.Controls"
+             xmlns:cascade="clr-namespace:CascadePass.Core.UI.Controls"
+             xmlns:converters="clr-namespace:CascadePass.Core.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <converters:NullToTrayBrushConverter x:Key="NullToTrayBrushConverter" />
+        <converters:SelectionAwareBrushConverter x:Key="SelectionAwareBrushConverter" />
+        <converters:SelectionAwareFontWeightConverter x:Key="SelectionAwareFontWeightConverter" />
+        <converters:SelectionAwareCornerRadiusConverter x:Key="SelectionAwareCornerRadiusConverter" />
+
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="OuterBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            ClipToBounds="True">
+                            <Border.CornerRadius>
+                                <MultiBinding Converter="{StaticResource SelectionAwareCornerRadiusConverter}">
+                                    <Binding Path="IsSelected" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                                    <Binding Path="ItemCornerRadius" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                                    <Binding Path="ItemCornerRadius" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                                    <Binding Path="ItemCornerRadius" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                                </MultiBinding>
+                            </Border.CornerRadius>
+
+                            <ContentPresenter HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"
+                                      Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <!--<Setter TargetName="OuterBorder" Property="Background" Value="{Binding MouseOverBackground, RelativeSource={RelativeSource AncestorType=UserControl}}" />-->
+                                <Setter TargetName="OuterBorder" Property="Background">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource NullToTrayBrushConverter}">
+                                            <!-- Item override -->
+                                            <Binding Path="MouseOverBackground" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                                            <!-- Tray default -->
+                                            <Binding Path="MouseOverBackground" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <!--<Setter TargetName="OuterBorder" Property="Background" Value="{Binding PressedBackground, RelativeSource={RelativeSource AncestorType=UserControl}}" />-->
+                                <Setter TargetName="OuterBorder" Property="Background">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource NullToTrayBrushConverter}">
+                                            <!-- Item override -->
+                                            <Binding Path="PressedBackground" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                                            <!-- Tray default -->
+                                            <Binding Path="PressedBackground" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="NavLabelStyle" TargetType="TextBlock">
             <Setter Property="Opacity" Value="0"/>
             <Style.Triggers>
@@ -35,22 +99,19 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Button
-        Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
-        CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
-        ToolTip="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
-        HorizontalAlignment="Stretch"
-        HorizontalContentAlignment="Left"
-        Padding="0"
-        Background="Transparent" BorderBrush="Transparent">
-        <Border
-            Background="Transparent"
-            HorizontalAlignment="Left"
-            CornerRadius="4"
-            Padding="8"
-            Cursor="Hand">
-            <StackPanel Orientation="Horizontal">
-                <Border BorderBrush="{DynamicResource NavigationDrawer.SelectedIcon.Border.Background}" Height="12">
+        <Button
+            Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            ToolTip="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            HorizontalContentAlignment="Left"
+            Padding="0"
+            Style="{StaticResource NavButtonStyle}"
+            BorderBrush="Transparent">
+
+            <StackPanel Orientation="Horizontal" Margin="8">
+                <Border BorderBrush="{Binding SelectionStripeBrush, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="12">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Setter Property="BorderThickness" Value="0" />
@@ -71,17 +132,29 @@
                     HorizontalAlignment="Left"
                     Width="32" Height="32" Margin="0,0,8,0"/>
 
-                <TextBlock
+                <TextBlock                        
                     Text="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
-                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     Style="{StaticResource NavLabelStyle}">
-                    <TextBlock.RenderTransform>
-                        <TranslateTransform x:Name="TextSlideTransform" X="-20"/>
-                    </TextBlock.RenderTransform>
+                    <TextBlock.Foreground>
+                        <MultiBinding Converter="{StaticResource SelectionAwareBrushConverter}">
+                            <Binding Path="IsSelected" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                            <Binding Path="ItemForeground" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                            <Binding Path="ItemForeground" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                            <Binding Path="SelectedForeground" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                        </MultiBinding>
+                    </TextBlock.Foreground>
+
+                    <TextBlock.FontWeight>
+                        <MultiBinding Converter="{StaticResource SelectionAwareFontWeightConverter}">
+                            <Binding Path="IsSelected" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                            <Binding Path="FontWeight" RelativeSource="{RelativeSource AncestorType=local:NavigationButton}" />
+                            <Binding Path="FontWeight" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                            <Binding Path="SelectedFontWeight" RelativeSource="{RelativeSource AncestorType=local:NavigationTray}" />
+                        </MultiBinding>
+                    </TextBlock.FontWeight>
                 </TextBlock>
             </StackPanel>
-        </Border>
-    </Button>
+        </Button>
 </UserControl>

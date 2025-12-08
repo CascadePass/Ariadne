@@ -52,7 +52,7 @@ namespace CascadePass.Core.UI
             if (source == null)
                 return false;
 
-            WeakReference<object>? weakRef;
+            WeakReference<object> weakRef;
             List<HandlerInfo> foundHandlers;
 
             lock (syncRoot)
@@ -91,7 +91,7 @@ namespace CascadePass.Core.UI
             if (source == null)
                 return false;
 
-            WeakReference<object>? weakRef;
+            WeakReference<object> weakRef;
             List<HandlerInfo> foundHandlers;
 
             lock (syncRoot)
@@ -157,7 +157,7 @@ namespace CascadePass.Core.UI
             }
         }
 
-        private WeakReference<object>? FindWeakReference(object target)
+        private WeakReference<object> FindWeakReference(object target)
         {
             foreach (var weakRef in handlers.Keys)
             {
