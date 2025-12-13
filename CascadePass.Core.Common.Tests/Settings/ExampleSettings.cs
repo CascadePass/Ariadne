@@ -15,6 +15,11 @@ namespace CascadePass.Core.Common.Tests.Settings
             Theme = "Light";
             TitleBarMode = TitleBarContentMode.SearchBar;
         }
+
+        public override void Clamp()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class ExampleJsonSettings : SettingsDocument
@@ -29,6 +34,11 @@ namespace CascadePass.Core.Common.Tests.Settings
         {
             Theme = "Light";
             TitleBarMode = TitleBarContentMode.SearchBar;
+        }
+
+        public override void Clamp()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
