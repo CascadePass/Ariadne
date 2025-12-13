@@ -8,12 +8,13 @@ namespace CascadePass.Core.Common.Settings
         private readonly JsonSerializerOptions options = new()
         {
             WriteIndented = true,
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never,
         };
 
         public string Serialize<T>(T settings)
         {
-            return JsonSerializer.Serialize(settings, options);
+            return JsonSerializer.Serialize(settings, settings.GetType(), options);
         }
 
         public T Deserialize<T>(string data)
