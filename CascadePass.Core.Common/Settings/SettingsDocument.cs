@@ -44,7 +44,33 @@ namespace CascadePass.Core.Common.Settings
 
         public virtual void SaveToFile(string path)
         {
+            string directory = Path.GetDirectoryName(path);
+
+            if (!string.IsNullOrEmpty(directory))
+            {
+                // C:\Test\Company\Region\Product\Feature\File.txt
+                // This call will create C:\Test if it's missing,
+                // and so on for any folder in the path.
+                //
+                // There is no need to loop throuh the folder
+                // levels and create each of them individually.
+
+                Directory.CreateDirectory(directory);
+            }
+
             File.WriteAllText(path, this.Serialize());
+        }
+
+        public static T LoadFromFile<T>(string path, DefaultSettingsSerializationFormat format)
+            where T : SettingsDocument
+        {
+            ISettingsSerializer serializer = format switch
+            {
+                DefaultSettingsSerializationFormat.Json => new JsonSettingsSerializer(),
+                DefaultSettingsSerializationFormat.Xml => new XmlSettingsSerializer(),
+                _ => throw new System.ArgumentOutOfRangeException(nameof(format), format, null)
+            };
+            return SettingsDocument.LoadFromFile<T>(path, serializer);
         }
 
         public static T LoadFromFile<T>(string path, ISettingsSerializer serializer)
@@ -58,5 +84,7 @@ namespace CascadePass.Core.Common.Settings
         }
 
         public abstract void ResetToDefaults();
+
+        public abstract void Clamp();
     }
 }
