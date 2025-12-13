@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CascadePass.Core.Common.Tests
+﻿namespace CascadePass.Core.Common.Tests
 {
     [TestClass]
     public class InstanceMonitorTests
@@ -78,6 +72,8 @@ namespace CascadePass.Core.Common.Tests
             Assert.IsTrue(InstanceMonitor.IsPolling);
 
             InstanceMonitor.StopMonitoring();
+
+            System.Threading.Thread.Sleep(20);
 
             Assert.IsFalse(InstanceMonitor.IsPolling);
         }
