@@ -6,11 +6,35 @@ using System.Text;
 
 namespace CascadePass.Core.Common.Data.Csv
 {
+    /// <summary>
+    /// Provides functionality to parse CSV data into structured objects.
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="CsvParser"/> reads CSV input according to the rules defined in
+    /// <see cref="CsvOptions"/> and produces both a strongly-typed column list and a
+    /// <see cref="DataTable"/> representation for tabular access.
+    /// </remarks>
     public class CsvParser : CsvProvider
     {
+        /// <summary>
+        /// Gets or sets the collection of columns discovered in the parsed CSV data.
+        /// </summary>
+        /// <remarks>
+        /// Each <see cref="CsvColumn"/> represents metadata about a column, such as its
+        /// name, index, and inferred type. This collection is populated after parsing.
+        /// </remarks>
         public List<CsvColumn> Columns { get; set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="DataTable"/> containing the parsed CSV rows.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="DataTable"/> provides a tabular representation of the CSV data,
+        /// with rows and columns accessible via standard ADO.NET APIs. This property is
+        /// populated after parsing completes.
+        /// </remarks>
         public DataTable Table { get; set; }
+
 
         public static CsvParser Parse(string rawText, CsvOptions csvOptions)
         {
@@ -23,13 +47,49 @@ namespace CascadePass.Core.Common.Data.Csv
             return parser;
         }
 
+        /// <summary>
+        /// Parses raw CSV text into a <see cref="DataTable"/>.
+        /// </summary>
+        /// <param name="rawText">
+        /// The raw CSV content as a single string. This should include all rows and
+        /// columns, with delimiters, quotes, and line endings defined by the
+        /// associated <see cref="CsvOptions"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="DataTable"/> containing the parsed CSV data, with rows and
+        /// columns populated according to the configured <see cref="CsvOptions"/>.
+        /// </returns>
+        /// <remarks>
+        /// - The parser respects the delimiter, quote, escape, and line ending rules
+        ///   defined in <see cref="CsvOptions"/>.
+        /// - If <see cref="CsvOptions.FirstRowAsHeader"/> is <c>true</c>, the first row
+        ///   will be used to name the columns in the <see cref="DataTable"/>.
+        /// - If <see cref="CsvOptions.PreserveWhitespace"/> is <c>false</c>, leading and
+        ///   trailing whitespace in fields will be trimmed.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// var options = CsvOptions.Default;
+        /// var parser = new CsvParser(options);
+        /// var table = parser.Parse("Name,Age\nAlice,30\nBob,25");
+        ///
+        /// // Access data
+        /// Console.WriteLine(table.Rows[0]["Name"]); // Outputs "Alice"
+        /// </code>
+        /// </example>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="rawText"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown if the CSV content is malformed and cannot be parsed.
+        /// </exception>
         public DataTable Parse(string rawText)
         {
             #region Guard clauses
 
             ArgumentNullException.ThrowIfNullOrWhiteSpace(rawText, nameof(rawText));
 
-            if (string.IsNullOrEmpty(this.CsvOptions.Separator))
+            if (string.IsNullOrEmpty(this.CsvOptions.Delimiter))
             {
                 throw new InvalidOperationException("CSV Separator cannot be null or empty.");
             }
@@ -54,7 +114,7 @@ namespace CascadePass.Core.Common.Data.Csv
 
             if (lines.Length > 0)
             {
-                var headers = this.SplitCsvLine(lines[0], this.CsvOptions.Separator);
+                var headers = this.SplitCsvLine(lines[0], this.CsvOptions.Delimiter);
 
                 int columnIndex = 0;
                 foreach (string header in headers)
@@ -73,7 +133,7 @@ namespace CascadePass.Core.Common.Data.Csv
 
                 for (int i = (this.CsvOptions.FirstRowAsHeader ? 1 : 0); i < lines.Length; i++)
                 {
-                    var fields = this.SplitCsvLine(lines[i], this.CsvOptions.Separator);
+                    var fields = this.SplitCsvLine(lines[i], this.CsvOptions.Delimiter);
 
                     if (fields.Count == headers.Count)
                     {
