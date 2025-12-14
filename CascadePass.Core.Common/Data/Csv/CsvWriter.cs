@@ -43,7 +43,7 @@ namespace CascadePass.Core.Common.Data.Csv
             if (this.CsvOptions.FirstRowAsHeader)
             {
                 string headerLine = string.Join(
-                    this.CsvOptions.Separator,
+                    this.CsvOptions.Delimiter,
                     table.Columns.Cast<DataColumn>().Select(c => EscapeField(c.ColumnName))
                 );
                 writer.Write(headerLine);
@@ -54,7 +54,7 @@ namespace CascadePass.Core.Common.Data.Csv
             foreach (DataRow row in table.Rows)
             {
                 string line = string.Join(
-                    this.CsvOptions.Separator,
+                    this.CsvOptions.Delimiter,
                     row.ItemArray.Select(field => EscapeField(field?.ToString() ?? string.Empty))
                 );
 
@@ -67,7 +67,7 @@ namespace CascadePass.Core.Common.Data.Csv
 
         private string EscapeField(string field)
         {
-            bool mustQuote = field.Contains(this.CsvOptions.Separator)
+            bool mustQuote = field.Contains(this.CsvOptions.Delimiter)
                           || field.Contains('\"')
                           || field.Contains(this.EffectiveLineEnding);
 
