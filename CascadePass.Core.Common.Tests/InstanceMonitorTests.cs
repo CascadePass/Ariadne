@@ -67,13 +67,13 @@
             // Ensure monitoring is stopped before test starts
             InstanceMonitor.StopMonitoring();
 
-            InstanceMonitor.StartMonitoring(500);
+            InstanceMonitor.StartMonitoring(5);
 
             Assert.IsTrue(InstanceMonitor.IsPolling);
 
             InstanceMonitor.StopMonitoring();
 
-            System.Threading.Thread.Sleep(20);
+            System.Threading.Thread.Sleep(50);
 
             Assert.IsFalse(InstanceMonitor.IsPolling);
         }
