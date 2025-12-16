@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 
 namespace CascadePass.Core.Common.Data.Csv
@@ -119,13 +120,7 @@ namespace CascadePass.Core.Common.Data.Csv
                 int columnIndex = 0;
                 foreach (string header in headers)
                 {
-                    CsvColumn csvColumn = new() { Name = this.CsvOptions.FirstRowAsHeader ? header : $"Column {++columnIndex}" };
-
-                    int columnWithNameCount = 0;
-                    while (this.Columns.Any(c => c.Name == csvColumn.Name))
-                    {
-                        csvColumn.Name = $"{header}{++columnWithNameCount}";
-                    }
+                    CsvColumn csvColumn = new() { Name = this.GenerateColumnName(header, ++columnIndex) };
 
                     this.Columns.Add(csvColumn);
                     this.Table.Columns.Add(csvColumn.Name);
@@ -163,6 +158,29 @@ namespace CascadePass.Core.Common.Data.Csv
 
             this.IsWorking = false;
             return this.Table;
+        }
+
+        internal string GenerateColumnName(string firstData, int columnIndex)
+        {
+            string name = string.Empty;
+
+            if(this.CsvOptions.FirstRowAsHeader)
+            {
+                name = firstData;
+            }
+            else if (this.DesiredColumns.Count >= columnIndex && !string.IsNullOrWhiteSpace(this.DesiredColumns[columnIndex].Name))
+            {
+                name = this.DesiredColumns[columnIndex].Name;
+            }
+
+            string resultingName = name;
+            int columnWithNameCount = 0;
+            while (this.Columns.Any(c => c.Name == resultingName))
+            {
+                resultingName = $"{name}{++columnWithNameCount}";
+            }
+
+            return resultingName;
         }
 
         internal string GetValue(string value)
