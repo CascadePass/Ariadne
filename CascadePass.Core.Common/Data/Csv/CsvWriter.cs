@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 
@@ -42,10 +43,17 @@ namespace CascadePass.Core.Common.Data.Csv
             // headers
             if (this.CsvOptions.FirstRowAsHeader)
             {
+                if (this.DesiredColumns.Count != table.Columns.Count)
+                {
+                    throw new InvalidOperationException(
+                        $"DesiredColumns count ({this.DesiredColumns.Count}) does not match table column count ({table.Columns.Count}).");
+                }
+
                 string headerLine = string.Join(
                     this.CsvOptions.Delimiter,
-                    table.Columns.Cast<DataColumn>().Select(c => EscapeField(c.ColumnName))
+                    this.DesiredColumns.Select(c => EscapeField(c.Name))
                 );
+
                 writer.Write(headerLine);
                 writer.Write(lineEnding);
             }
