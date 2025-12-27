@@ -73,7 +73,7 @@ namespace CascadePass.Core.Common.Data.Csv
             this.IsWorking = false;
         }
 
-        private string EscapeField(string field)
+        internal string EscapeField(string field)
         {
             bool mustQuote = field.Contains(this.CsvOptions.Delimiter)
                           || field.Contains('\"')

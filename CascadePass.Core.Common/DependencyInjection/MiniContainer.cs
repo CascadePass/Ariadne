@@ -87,6 +87,9 @@ namespace CascadePass.Core.Common.DependencyInjection
         /// The type of service to resolve. This must be a type that has been
         /// previously registered with the container.
         /// </param>
+        /// <param name="externalParameters">
+        /// Any external parameters used to create a dependency.
+        /// </param>
         /// <returns>
         /// An object instance of the requested <paramref name="serviceType"/>.
         /// </returns>
@@ -102,16 +105,26 @@ namespace CascadePass.Core.Common.DependencyInjection
         /// var logger = (ILogger)container.Resolve(typeof(ILogger));
         /// </code>
         /// </example>
-        public object Resolve(Type serviceType)
+        public object Resolve(Type serviceType, params object[] externalParameters)
         {
             if (!services.TryGetValue(serviceType, out var descriptor))
-                throw new InvalidOperationException($"Service not registered: {serviceType}");
+            {
+                // If the type isn't registered, we can only resolve it
+                // if an external parameter *is* the correct type.
+                if (externalParameters == null ||
+                    !externalParameters.Any(ep => serviceType.IsInstanceOfType(ep)))
+                {
+                    throw new InvalidOperationException($"Service not registered: {serviceType}");
+                }
+
+                // If we get here, the external parameter *is* the instance.
+                return externalParameters.First(ep => serviceType.IsInstanceOfType(ep));
+            }
 
             // Singleton: return cached instance
             if (descriptor.Lifetime == Lifetime.Singleton && descriptor.CachedInstance != null)
                 return descriptor.CachedInstance;
 
-            // Create instance
             var implType = descriptor.ImplementationType;
 
             // Pick the constructor with the most parameters
@@ -120,8 +133,22 @@ namespace CascadePass.Core.Common.DependencyInjection
                                .First();
 
             var parameters = ctor.GetParameters()
-                                 .Select(p => Resolve(p.ParameterType))
-                                 .ToArray();
+                .Select(p =>
+                {
+                    // 1. Try to match an external parameter by type
+                    if (externalParameters != null)
+                    {
+                        var external = externalParameters
+                            .FirstOrDefault(ep => p.ParameterType.IsInstanceOfType(ep));
+
+                        if (external != null)
+                            return external;
+                    }
+
+                    // 2. Otherwise resolve from container
+                    return Resolve(p.ParameterType, externalParameters);
+                })
+                .ToArray();
 
             var instance = Activator.CreateInstance(implType, parameters);
 

@@ -28,7 +28,7 @@ namespace CascadePass.Core.Common.DependencyInjection
         /// <exception cref="InvalidOperationException">
         /// Thrown if the requested type has not been registered.
         /// </exception>
-        object Resolve(Type type);
+        object Resolve(Type type, params object[] externalParameters);
     }
 
 }
