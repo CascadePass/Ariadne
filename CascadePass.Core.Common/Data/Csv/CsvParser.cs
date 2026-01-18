@@ -174,6 +174,12 @@ namespace CascadePass.Core.Common.Data.Csv
 
             string resultingName = name;
             int columnWithNameCount = 0;
+
+            if(string.IsNullOrWhiteSpace(resultingName))
+            {
+                resultingName = $"Column{columnIndex}";
+            }
+
             while (this.Columns.Any(c => c.Name == resultingName))
             {
                 resultingName = $"{name}{++columnWithNameCount}";
